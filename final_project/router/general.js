@@ -27,8 +27,21 @@ public_users.get('/isbn/:isbn',function (req, res) {
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const authorToFind = req.params.author;
+  let foundResult = [];
+
+  for (const key in books) {
+    if (books.hasOwnProperty(key)) {
+        if (books[key].author === authorToFind) {
+            foundResult.push(books[key]);            
+        }
+    }
+  }
+  if (foundResult.length != 0) {
+    res.send(JSON.stringify(foundResult,null,4) + "\n");
+  } else {
+    res.status(404).send(`No entry found with author "${authorToFind}".\n`);
+  }
 });
 
 // Get all books based on title
