@@ -12,16 +12,16 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  res.send(JSON.stringify(books,null,4));
+  res.send(JSON.stringify(books,null,4)  + "\n");
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   const isbn = parseInt(req.params.isbn);
   if (Number.isInteger(isbn) && isbn >= 1 && isbn <= 10) {
-    res.send(JSON.stringify(books[isbn],null,4));
+    res.send(JSON.stringify(books[isbn],null,4)  + "\n");
   } else {
-    return res.status(300).json({message: "A valid isbn in this app is integer 1 to 10"});
+    res.status(300).send("A valid isbn in this app is integer 1 to 10 \n");
   }
  });
   
@@ -31,10 +31,8 @@ public_users.get('/author/:author',function (req, res) {
   let foundResult = [];
 
   for (const key in books) {
-    if (books.hasOwnProperty(key)) {
-        if (books[key].author === authorToFind) {
-            foundResult.push(books[key]);            
-        }
+    if (books[key].author === authorToFind) {        
+            foundResult.push(books[key]);  
     }
   }
   if (foundResult.length != 0) {
