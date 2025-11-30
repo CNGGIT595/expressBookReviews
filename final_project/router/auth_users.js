@@ -34,17 +34,14 @@ regd_users.post("/login", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    // Check if username or password is missing
     if (!username || !password) {
-        return res.status(404).json({ message: "Error logging in" });
+        return res.status(404).json({ message: "Error logging in - username and password must be provided." });
     }
-
-    // Authenticate user
     if (authenticatedUser(username, password)) {
         // Generate JWT access token
         let accessToken = jwt.sign({
             data: password
-        }, 'access', { expiresIn: 30 });
+        }, 'access', { expiresIn: 3600 });
 
         // Store access token and username in session
         req.session.authorization = {
