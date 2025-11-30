@@ -61,8 +61,12 @@ public_users.get('/title/:title',function (req, res) {
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
-});
+    const isbn = parseInt(req.params.isbn);
+    if (Number.isInteger(isbn) && isbn >= 1 && isbn <= 10) {
+      res.send(JSON.stringify(books[isbn].reviews,null,4));
+    } else {
+      res.status(300).send("A valid isbn in this app is integer 1 to 10 \n");
+    }
+   });
 
 module.exports.general = public_users;
