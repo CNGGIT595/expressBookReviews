@@ -32,12 +32,26 @@ public_users.get('/',function (req, res) {
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  const isbn = parseInt(req.params.isbn);
-  if (Number.isInteger(isbn) && isbn >= 1 && isbn <= 10) {
-    res.send(JSON.stringify(books[isbn],null,4));
-  } else {
-    res.status(300).send("A valid isbn in this app is integer 1 to 10 \n");
-  }
+    const isbn = parseInt(req.params.isbn);
+    let myPromise = new Promise((resolve,reject) => {
+        if (Number.isInteger(isbn) && isbn >= 1 && isbn <= 10) {
+            res.send(JSON.stringify(books[isbn],null,4));
+            resolve("http request to get books data based on ISBN was successful.")  
+        } else {
+            res.status(300).send("A valid isbn in this app is integer 1 to 10 \n");
+            reject("ISBN from user's query is invalid")
+        }
+    });
+    myPromise
+        .then((successMessage) => {
+            console.log("From Callback: " + successMessage);
+        })
+        .catch((error) => {
+            console.error("Error: ", error);
+        })
+        .finally(() => {
+            console.log("Cleanup complete"); 
+        });
  });
   
 // Get book details based on author
