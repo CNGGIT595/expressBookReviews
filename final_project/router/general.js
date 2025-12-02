@@ -23,7 +23,7 @@ public_users.post("/register", (req,res) => {
 public_users.get('/',function (req, res) {
     let myPromise = new Promise((resolve,reject) => {
         res.send(JSON.stringify(books,null,4));
-        resolve("http request to get books data was successful.")       
+        resolve("HTTP request to get all books data was successful.")       
     });   
     myPromise.then((successMessage) => {
         console.log("From Callback: " + successMessage)
@@ -76,17 +76,24 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
     const titleToFind = req.params.title;
     let titleSearchResult = [];
-  
-    for (const key in books) {
-      if (books[key].title === titleToFind) {        
-              titleSearchResult.push(books[key]);  
-      }
-    }
-    if (titleSearchResult.length != 0) {
-      res.send(JSON.stringify(titleSearchResult,null,4));
-    } else {
-      res.status(404).send(`No entry found with title "${titleToFind}".\n`);
-    }
+    let myPromise = new Promise((resolve,reject) => { 
+        for (const key in books) {
+            if (books[key].title === titleToFind) {        
+                    titleSearchResult.push(books[key]);  
+            }
+        }
+        if (titleSearchResult.length != 0) {
+            res.send(JSON.stringify(titleSearchResult,null,4));
+            resolve("HTTP request for getting the book details based on Title was successful.") 
+        } else {
+            res.status(404).send(`No entry found with title "${titleToFind}".\n`);
+            reject(`No entry found with title "${titleToFind}".\n`)
+        }
+    });
+    myPromise
+    .then((successMessage) => {console.log("From Callback: " + successMessage);})
+    .catch((error) => {console.error("Error: ", error);})
+    .finally(() => {console.log("Cleanup complete");});
 });
 
 //  Get book review
