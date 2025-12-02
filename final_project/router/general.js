@@ -85,7 +85,7 @@ public_users.get('/title/:title',function (req, res) {
         }
         if (titleSearchResult.length != 0) {
             res.send(JSON.stringify(titleSearchResult,null,4));
-            resolve(`HTTP request for getting the book details based on "${titleToFind}" was successful.`) 
+            resolve(`HTTP request for getting the book details based on title "${titleToFind}" was successful.`) 
         } else {
             res.status(404).send(`No entry found with title "${titleToFind}".\n`);
             reject(`No entry found with title "${titleToFind}".\n`)
