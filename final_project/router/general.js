@@ -28,6 +28,7 @@ public_users.get('/',function (req, res) {
     myPromise.then((successMessage) => {
         console.log("From Callback: " + successMessage)
         })
+        .finally(() => {console.log("Cleanup complete");});
   });
 
 // Get book details based on ISBN
@@ -60,7 +61,7 @@ public_users.get('/author/:author',function (req, res) {
         }
         if (foundResult.length != 0) {
             res.send(JSON.stringify(foundResult,null,4));
-            resolve("HTTP request for getting the book details based on Author was successful.") 
+            resolve(`HTTP request for getting the book details based on author "${authorToFind}" was successful.`) 
         } else {
             res.status(404).send(`No entry found with author "${authorToFind}".\n`);
             reject(`No entry found with author "${authorToFind}".\n`)
@@ -84,7 +85,7 @@ public_users.get('/title/:title',function (req, res) {
         }
         if (titleSearchResult.length != 0) {
             res.send(JSON.stringify(titleSearchResult,null,4));
-            resolve("HTTP request for getting the book details based on Title was successful.") 
+            resolve(`HTTP request for getting the book details based on "${titleToFind}" was successful.`) 
         } else {
             res.status(404).send(`No entry found with title "${titleToFind}".\n`);
             reject(`No entry found with title "${titleToFind}".\n`)
