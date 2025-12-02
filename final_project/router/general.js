@@ -36,39 +36,40 @@ public_users.get('/isbn/:isbn',function (req, res) {
     let myPromise = new Promise((resolve,reject) => {
         if (Number.isInteger(isbn) && isbn >= 1 && isbn <= 10) {
             res.send(JSON.stringify(books[isbn],null,4));
-            resolve("http request to get books data based on ISBN was successful.")  
+            resolve("HTTP request for getting the book details based on ISBN was successful.")  
         } else {
             res.status(300).send("A valid isbn in this app is integer 1 to 10 \n");
             reject("ISBN from user's query is invalid")
         }
     });
     myPromise
-        .then((successMessage) => {
-            console.log("From Callback: " + successMessage);
-        })
-        .catch((error) => {
-            console.error("Error: ", error);
-        })
-        .finally(() => {
-            console.log("Cleanup complete"); 
-        });
+        .then((successMessage) => {console.log("From Callback: " + successMessage);})
+        .catch((error) => {console.error("Error: ", error);})
+        .finally(() => {console.log("Cleanup complete");});
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  const authorToFind = req.params.author;
-  let foundResult = [];
-
-  for (const key in books) {
-    if (books[key].author === authorToFind) {        
-            foundResult.push(books[key]);  
-    }
-  }
-  if (foundResult.length != 0) {
-    res.send(JSON.stringify(foundResult,null,4));
-  } else {
-    res.status(404).send(`No entry found with author "${authorToFind}".\n`);
-  }
+    const authorToFind = req.params.author;
+    let foundResult = [];
+    let myPromise = new Promise((resolve,reject) => {
+        for (const key in books) {
+            if (books[key].author === authorToFind) {        
+                    foundResult.push(books[key]);  
+            }
+        }
+        if (foundResult.length != 0) {
+            res.send(JSON.stringify(foundResult,null,4));
+            resolve("HTTP request for getting the book details based on Author was successful.") 
+        } else {
+            res.status(404).send(`No entry found with author "${authorToFind}".\n`);
+            reject(`No entry found with author "${authorToFind}".\n`)
+        }        
+    });
+    myPromise
+    .then((successMessage) => {console.log("From Callback: " + successMessage);})
+    .catch((error) => {console.error("Error: ", error);})
+    .finally(() => {console.log("Cleanup complete");});
 });
 
 // Get all books based on title
